@@ -1,44 +1,59 @@
+project(Application)
 
 set(_Application_Sources
-    Include/Application.h
+        "${CMAKE_CURRENT_LIST_DIR}/Include/Application.h"
 )
+
+# Define ${CINDER_PATH} as usual.
+get_filename_component(CINDER_PATH "${CMAKE_CURRENT_LIST_DIR}/../../../../.." ABSOLUTE)
 
 if (WIN32)
     list(APPEND _Application_Sources
-        Source/DX11/Entry.cpp
-        Source/DX11/imgui_impl_dx11.cpp
-        Source/DX11/imgui_impl_dx11.h
-        Source/DX11/imgui_impl_win32.cpp
-        Source/DX11/imgui_impl_win32.h
+        "${CMAKE_CURRENT_LIST_DIR}/Source/DX11/Entry.cpp"
+        "${CMAKE_CURRENT_LIST_DIR}/Source/DX11/imgui_impl_dx11.cpp"
+        "${CMAKE_CURRENT_LIST_DIR}/Source/DX11/imgui_impl_dx11.h"
+        "${CMAKE_CURRENT_LIST_DIR}/Source/DX11/imgui_impl_win32.cpp"
+        "${CMAKE_CURRENT_LIST_DIR}/Source/DX11/imgui_impl_win32.h"
     )
 else()
+    include("${CMAKE_CURRENT_LIST_DIR}/../../../ThirdParty/gl3w/gl3wConfig.cmake")
     find_package(glfw3 3 REQUIRED)
     find_package(OpenGL REQUIRED)
 
     list(APPEND _Application_Sources
-        Source/GLFW/Entry.cpp
-        Source/GLFW/imgui_impl_glfw_gl3.cpp
-        Source/GLFW/imgui_impl_glfw_gl3.h
+        "${CMAKE_CURRENT_LIST_DIR}/Source/GLFW/Entry.cpp"
+        "${CMAKE_CURRENT_LIST_DIR}/Source/GLFW/imgui_impl_glfw_gl3.cpp"
+        "${CMAKE_CURRENT_LIST_DIR}/Source/GLFW/imgui_impl_glfw_gl3.h"
     )
 endif()
 
-
-
 source_group("" FILES ${_Application_Sources})
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${_Application_Sources})
+source_group(TREE ${CMAKE_CURRENT_LIST_DIR} FILES ${_Application_Sources})
 
 add_library(Application STATIC ${_Application_Sources})
 
-target_include_directories(Application PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Include)
+target_include_directories( Application SYSTEM BEFORE PUBLIC "${CINDER_PATH}/include")
+if(NOT TARGET cinder)
+    include("${CINDER_PATH}/proj/cmake/configure.cmake")
+    find_package(cinder REQUIRED PATHS
+	    "${CINDER_PATH}/${CINDER_LIB_DIRECTORY}"
+            "$ENV{CINDER_PATH}/${CINDER_LIB_DIRECTORY}")
+endif()
 
-find_package(imgui REQUIRED)
-find_package(stb_image REQUIRED)
-find_package(ScopeGuard REQUIRED)
+
+target_include_directories(Application PUBLIC ${CMAKE_CURRENT_LIST_DIR}/Include)
+
+target_include_directories(${PROJECT_NAME} PUBLIC  ${CMAKE_CURRENT_LIST_DIR}/Include)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/Source)
+
+include("${CMAKE_CURRENT_LIST_DIR}/../../../ThirdParty/ScopeGuard/ScopeGuardConfig.cmake")
 target_link_libraries(Application PUBLIC imgui ScopeGuard)
+
+include("${CMAKE_CURRENT_LIST_DIR}/../../../ThirdParty/stb_image/stb_imageConfig.cmake")
 target_link_libraries(Application PRIVATE stb_image)
 
 if (WIN32)
-    set(_DXSDK_Dir  ${CMAKE_SOURCE_DIR}/ThirdParty/DXSDK)
+	set(_DXSDK_Dir  ${CMAKE_CURRENT_LIST_DIR}/../../../ThirdParty/DXSDK)
     set(_DXSDK_Arch x86)
     if (${CMAKE_SIZEOF_VOID_P} EQUAL 8)
         set(_DXSDK_Arch x64)
@@ -60,7 +75,6 @@ if (WIN32)
 else()
     target_include_directories(Application PRIVATE ${OPENGL_INCLUDE_DIR})
 
-    find_package(gl3w REQUIRED)
     target_link_libraries(Application PRIVATE ${OPENGL_gl_LIBRARY} gl3w glfw)
 
     if (APPLE)

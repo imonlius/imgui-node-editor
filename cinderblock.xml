@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<cinder>
+<block
+	name="imgui-node-editor"
+	id="com.github.imonlius.imgui-node-editor"
+	git="git://github.com/imonlius/imgui-node-editor.git"
+	author="thedmd"
+	license="MIT"
+	summary="imgui-node-editor made to a CinderBlock"
+	>
+
+	<headerPattern>NodeEditor/Include/*.h</headerPattern>
+	<headerPattern>NodeEditor/Source/*.h</headerPattern>
+	<sourcePattern>NodeEditor/Source/*.cpp</sourcePattern>
+	<sourcePattern>NodeEditor/Source/*.inl</sourcePattern>
+
+	<headerPattern>ThirdParty/DXSDK/include/*.h</headerPattern>
+	<sourcePattern>ThirdParty/DXSDK/src/dxerr.cpp</sourcePattern>
+	<headerPattern>ThirdParty/gl3w/GL/*.h</headerPattern>
+	<sourcePattern>ThirdParty/gl3w/gl3w.cpp</sourcePattern>
+	<headerPattern>ThirdParty/ScopeGuard/ScopeGuard.h</headerPattern>
+	<headerPattern>ThirdParty/stb_image/stb_image.h</headerPattern>
+
+	<headerPattern>Examples/Common/Application/Include/Application.h</headerPattern>
+	<headerPattern>Examples/Common/Application/Source/DX11/*.h</headerPattern>
+	<sourcePattern>Examples/Common/Application/Source/DX11/*.cpp</sourcePattern>
+	<headerPattern>Examples/Common/Application/Source/GLFW/imgui_impl_glfw_gl3.h</headerPattern>
+	<sourcePattern>Examples/Common/Application/Source/GLFW/*.cpp</sourcePattern>
+
+	<headerPattern>Examples/Common/BlueprintUtilities/Include/ax/*.h</headerPattern>
+	<sourcePattern>Examples/Common/BlueprintUtilities/Include/ax/*.inl</sourcePattern>
+	<headerPattern>Examples/Common/BlueprintUtilities/Source/*.h</headerPattern>
+	<sourcePattern>Examples/Common/BlueprintUtilities/Source/ax/*.cpp</sourcePattern>
+
+	<includePath system="true">Examples/Common</includePath>
+	<includePath system="true">ThirdParty</includePath>
+	<includePath system="true">NodeEditor</includePath>
+
+</block>
+</cinder>

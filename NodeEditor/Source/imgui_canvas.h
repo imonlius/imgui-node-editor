@@ -46,8 +46,8 @@
 # define __IMGUI_EX_CANVAS_H__
 # pragma once
 
-# include <imgui.h>
-# include <imgui_internal.h> // ImRect, ImFloor
+# include <imgui/imgui.h>
+# include <imgui/imgui_internal.h> // ImRect, ImFloor
 
 namespace ImGuiEx {
 
